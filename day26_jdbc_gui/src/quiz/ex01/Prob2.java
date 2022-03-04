@@ -1,5 +1,7 @@
 package quiz.ex01;
 
+import java.util.Random;
+
 public class Prob2 {
 	public static void main(String[] args) {
 		int num = generateRandom();
@@ -12,12 +14,12 @@ public class Prob2 {
 	}
 
 	private static int generateRandom() {
-		// 구현하세요.
-		return 0;
+		return (int)(Math.random()*100)+1;
 	}
 
 	private static boolean primeNumber(int num) {
-		// 구현하세요.
-		return false;
+		for(int i = 2 ; i < num ; i++) 
+			if(num%i==0) return false;
+		return  true;
 	}
 }

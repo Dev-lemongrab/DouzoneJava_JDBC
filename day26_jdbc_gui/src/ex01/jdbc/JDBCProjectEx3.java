@@ -38,7 +38,7 @@ public class JDBCProjectEx3 extends JFrame implements ActionListener{
 		panWest.add(p1);
 		
 		p2 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		p2.add(new JLabel("이    름"));
+		p2.add(new JLabel("이    름")); 
 		p2.add(txtName = new JTextField(12));
 		panWest.add(p2);
 		

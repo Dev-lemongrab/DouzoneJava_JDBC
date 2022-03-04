@@ -10,7 +10,15 @@ public class Prob3 {
 	}
 
 	private static String getParameter(String url, String paramName) {
-		// 구현하세요
-		return null;
+		String[] arr = url.split("\\?");//http Get메서드 방식에서 ?로 주소와 파라미터값을 구분함 
+		String[] answer = arr[1].split("\\&");//각 파라미터는 &으로 나뉘어져 있음
+		String value = "";
+		for(int i = 0 ; i < answer.length ; i++) {
+			if (answer[i].contains(paramName)) { //&으로 나눈 각 파라미터 변수를 담고 있는 배열들 중 원하는 변수 이름을 포함하고 있으면
+				value = answer[i].split("\\=")[1];//=으로 변수와 값을 구분해준 뒤 값을 넣어줌
+				break;
+			}
+		}
+		return value;
 	}	
 }
