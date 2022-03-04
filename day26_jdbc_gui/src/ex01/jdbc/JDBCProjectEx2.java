@@ -9,7 +9,7 @@ import javax.swing.*;
 
 import connUtil.DBConnection;
 
-public class JDBCProjectEx1 extends JFrame implements ActionListener{
+public class JDBCProjectEx2 extends JFrame implements ActionListener{
 	//component 객체 선언
 	JPanel panWest, panSouth;  //왼쪽텍스트필드, 아래쪽 버튼
 	JPanel p1,p2,p3,p4,p5; 
@@ -25,9 +25,9 @@ public class JDBCProjectEx1 extends JFrame implements ActionListener{
 	private static final int TOTAL = 4;
 	int cmd = NONE;
 	
-	public JDBCProjectEx1() {//생성자 함수 - 멤버변수 초기화
+	public JDBCProjectEx2() {//생성자 함수 - 멤버변수 초기화
 		dbConnect();
-	
+		System.out.println("고객정보폼");
 		//component 등록
 		panWest = new JPanel(new GridLayout(5, 0));
 		p1 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -178,20 +178,20 @@ public class JDBCProjectEx1 extends JFrame implements ActionListener{
 		btnDel.setEnabled(false);
 		btnSearch.setEnabled(false);
 		
-		switch(command){ 
-			case ADD : 
-				btnAdd.setEnabled(true); 
-				cmd = ADD; 
-				break; 
+		switch(command){
+			case ADD :
+				btnAdd.setEnabled(true);
+				cmd = ADD;
+				break;
 			case DELETE :
-				btnDel.setEnabled(true); 
-				cmd = DELETE; 
-				break; 
-				 
-			case SEARCH : 
-				btnSearch.setEnabled(true); 
-				cmd = SEARCH; 
-				break; 
+				btnDel.setEnabled(true);
+				cmd = DELETE;
+				break;
+				
+			case SEARCH :
+				btnSearch.setEnabled(true);
+				cmd = SEARCH;
+				break;
 			case TOTAL :
 				btnTotal.setEnabled(true);
 				cmd = TOTAL;
@@ -208,7 +208,7 @@ public class JDBCProjectEx1 extends JFrame implements ActionListener{
 	}//setButton end
 
 	public static void main(String[] args) {
-		new JDBCProjectEx1();
+		new JDBCProjectEx2();
 	}
 }
 

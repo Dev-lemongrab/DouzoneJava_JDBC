@@ -6,15 +6,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 import connUtil.DBConnection;
 
-public class JDBCProjectEx1 extends JFrame implements ActionListener{
+public class JDBCProjectEx3 extends JFrame implements ActionListener{
 	//component 객체 선언
 	JPanel panWest, panSouth;  //왼쪽텍스트필드, 아래쪽 버튼
 	JPanel p1,p2,p3,p4,p5; 
 	JTextField txtNo, txtName, txtEmail, txtPhone;
 	JButton  btnTotal, btnAdd, btnDel, btnSearch, btnCancel;
+	MyModel model;
 	
 	JTable table; //검색과 전체 보기를 위한 테이블 객체 생성
 	//상태변화를 위한 변수 선언
@@ -25,9 +27,9 @@ public class JDBCProjectEx1 extends JFrame implements ActionListener{
 	private static final int TOTAL = 4;
 	int cmd = NONE;
 	
-	public JDBCProjectEx1() {//생성자 함수 - 멤버변수 초기화
+	public JDBCProjectEx3() {//생성자 함수 - 멤버변수 초기화
+		
 		dbConnect();
-	
 		//component 등록
 		panWest = new JPanel(new GridLayout(5, 0));
 		p1 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -80,6 +82,7 @@ public class JDBCProjectEx1 extends JFrame implements ActionListener{
 		setBounds(100, 100, 700, 300); //setSize(W,H);   pack(); 
 		setVisible(true);
 		
+		
 	} //constuctor end
 	
 	///////////db setting////////////////
@@ -120,7 +123,7 @@ public class JDBCProjectEx1 extends JFrame implements ActionListener{
 				return;
 			} //if in
 			setTitle(e.getActionCommand());
-			//add();  추가
+			add();  //추가
 			
 		}else if( obj == btnDel ){
 			if( cmd != DELETE ){
@@ -128,7 +131,7 @@ public class JDBCProjectEx1 extends JFrame implements ActionListener{
 				return;
 			} //if in
 			setTitle(e.getActionCommand());
-			//del();  삭제
+			del(); // 삭제
 			
 		}else if( obj == btnSearch ){
 			if( cmd != SEARCH ){
@@ -136,16 +139,113 @@ public class JDBCProjectEx1 extends JFrame implements ActionListener{
 				return;
 			} //if in
 			setTitle(e.getActionCommand());
-			//search();  검색
+			search(); // 검색
 			
 		}else if( obj == btnTotal ){
 			setTitle(e.getActionCommand());
-			//total();  전체보기
+			total(); // 전체보기
 		}
 		setText(NONE);
 		init(); //초기화 메소드, user method
 	}// actionPerformed end
+
+
+	///////////////////ButtonEvent//////////////////
 	
+	public void add() {
+		try {
+			String strNo = txtNo.getText();
+			String strName = txtName.getText();
+			String strMail = txtEmail.getText();
+			String strPhone = txtPhone.getText();
+			
+//			System.out.println(strNo + ", " + strName+", " + strMail + "," +strPhone);
+//			if(strNo.length()<1 || strName.length()<1) {
+//				JOptionPane.showMessageDialog(null, "번호와 이름은 필수 사항입니다. 입력해주세요");
+//				return;	
+//			}
+			switch (JOptionPane.showConfirmDialog(null, "("+strNo+", "+strName+", "+strMail+", " +strPhone+")", "추가하시겠습니까?", JOptionPane.YES_NO_OPTION)){ 
+			case 0 : //확인
+				break;
+			case 1 : //아니오
+				return;
+			}
+			pstmtInsert.setInt(1, Integer.parseInt(strNo));
+			pstmtInsert.setString(2, strName);
+			pstmtInsert.setString(3, strMail);
+			pstmtInsert.setString(4, strPhone);
+			
+			pstmtInsert.executeUpdate();
+		} catch (Exception e) { e.printStackTrace();}
+		
+		JOptionPane.showMessageDialog(null, "추가 됐습니다.");
+		
+	}
+	
+	public void del() {
+		String strNo = txtNo.getText();
+		if(strNo.length() < 1) {
+			JOptionPane.showMessageDialog(null, "고객코드는 필수 입니다.");
+			return;
+		}
+		try {
+			pstmtDelete.setInt(1, Integer.parseInt(strNo));
+			pstmtDelete.executeUpdate();
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		switch (JOptionPane.showConfirmDialog(null, "("+strNo+")", "삭제하시겠습니까?", JOptionPane.YES_NO_OPTION)){ 
+		case 0 : //확인
+			break;
+		case 1 : //아니오
+			return;
+		}
+		total();
+		
+	}
+	
+	
+	public void search() {
+		String strName = txtName.getText();
+		if(strName.length() < 1) {
+			JOptionPane.showMessageDialog(null, "이름은 필수입니다.");
+			return;
+		}
+		try {
+			pstmtSearchScroll.setString(1, strName);
+			ResultSet rsScroll = pstmtSearchScroll.executeQuery();
+			pstmtSearch.setString(1, strName);
+			ResultSet rs = pstmtSearch.executeQuery(); 
+			if(model == null) model = new MyModel();
+			model.getRowCount(rsScroll);
+			model.setData(rs);
+			table.setModel(new DefaultTableModel(model.data, model.columnName));
+			table.updateUI();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
+	
+	
+	public void total() {
+		try {
+			ResultSet rsScroll = pstmtTotalScroll.executeQuery();
+			ResultSet rs = pstmtTotal.executeQuery();
+			if(model == null) model = new MyModel();
+			model.getRowCount(rsScroll);
+			model.setData(rs);
+			//table.setModel(model);
+			
+			table.setModel(new DefaultTableModel(model.data, model.columnName));
+			table.updateUI();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+
 	private void init() {  //초기화 메소드
 		txtNo.setText("1");			txtNo.setEditable(false);
 		txtName.setText("dd");		txtName.setEditable(false);
@@ -178,20 +278,20 @@ public class JDBCProjectEx1 extends JFrame implements ActionListener{
 		btnDel.setEnabled(false);
 		btnSearch.setEnabled(false);
 		
-		switch(command){ 
-			case ADD : 
-				btnAdd.setEnabled(true); 
-				cmd = ADD; 
-				break; 
+		switch(command){
+			case ADD :
+				btnAdd.setEnabled(true);
+				cmd = ADD;
+				break;
 			case DELETE :
-				btnDel.setEnabled(true); 
-				cmd = DELETE; 
-				break; 
-				 
-			case SEARCH : 
-				btnSearch.setEnabled(true); 
-				cmd = SEARCH; 
-				break; 
+				btnDel.setEnabled(true);
+				cmd = DELETE;
+				break;
+				
+			case SEARCH :
+				btnSearch.setEnabled(true);
+				cmd = SEARCH;
+				break;
 			case TOTAL :
 				btnTotal.setEnabled(true);
 				cmd = TOTAL;
@@ -208,7 +308,7 @@ public class JDBCProjectEx1 extends JFrame implements ActionListener{
 	}//setButton end
 
 	public static void main(String[] args) {
-		new JDBCProjectEx1();
+		new JDBCProjectEx3();
 	}
 }
 
