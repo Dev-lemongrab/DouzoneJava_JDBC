@@ -17,7 +17,7 @@ public class Prob5 {
 		while(sc.hasNext()){
 			String str = sc.next();
 			str = str.toLowerCase();
-			if(str.contains("_")){// "_"면 삭제 및 여기 다음 글자 대문자로 바꿔주기 
+			if(str.contains("_")){// "_"존재하면 삭제 및 여기 다음 글자 대문자로 바꿔주기 
 				String[] strArr = str.split("_");
 				strArr[1] = strArr[1].replace(strArr[1].charAt(0), Character.toUpperCase(strArr[1].charAt(0)));//_으로 나눈 다음 문자열 첫글자 uppercase로 바꿔주기 
 				str = strArr[0]+strArr[1];
