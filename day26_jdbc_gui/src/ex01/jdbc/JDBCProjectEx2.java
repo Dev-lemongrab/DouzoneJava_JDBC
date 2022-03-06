@@ -26,7 +26,7 @@ public class JDBCProjectEx2 extends JFrame implements ActionListener{
 	int cmd = NONE;
 	
 	public JDBCProjectEx2() {//생성자 함수 - 멤버변수 초기화
-		dbConnect();
+		dbConnect(); 
 		System.out.println("고객정보폼");
 		//component 등록
 		panWest = new JPanel(new GridLayout(5, 0));

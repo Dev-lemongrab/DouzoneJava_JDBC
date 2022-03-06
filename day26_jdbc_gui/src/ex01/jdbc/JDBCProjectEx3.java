@@ -247,10 +247,10 @@ public class JDBCProjectEx3 extends JFrame implements ActionListener{
 
 
 	private void init() {  //초기화 메소드
-		txtNo.setText("1");			txtNo.setEditable(false);
-		txtName.setText("dd");		txtName.setEditable(false);
-		txtEmail.setText("ff");		txtEmail.setEditable(false);
-		txtPhone.setText("ff");		txtPhone.setEditable(false);
+		txtNo.setText("");			txtNo.setEditable(false);
+		txtName.setText("");		txtName.setEditable(false);
+		txtEmail.setText("");		txtEmail.setEditable(false);
+		txtPhone.setText("");		txtPhone.setEditable(false);
 	}// init() end
 
 	private void setText(int command) {
@@ -263,6 +263,7 @@ public class JDBCProjectEx3 extends JFrame implements ActionListener{
 				break;
 			case DELETE :
 				txtNo.setEditable(true);
+				break;
 			case SEARCH :
 				txtName.setEditable(true);
 				break;

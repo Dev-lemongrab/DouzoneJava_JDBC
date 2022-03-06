@@ -25,7 +25,7 @@ public class MyModel extends AbstractTableModel {
             rsScroll.last(); //레코드의 마지막으로 이동.
             rows = rsScroll.getRow();
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(); 
         }
         return rows;
     }
